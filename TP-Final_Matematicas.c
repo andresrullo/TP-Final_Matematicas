@@ -1,90 +1,154 @@
 // librerias
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
 #include <ctype.h>
 
-void main() {
-    char variable1;
-    char variable2;
-    char resultado;
-    int option;
+int main(){
+    //VARIABLES
+    int cantVariables = 0;
+    int cantRow = 0, cantColumn = 0;
+    char operation[4];
+    char continuo[3];
 
-    printf("Ingrese la primer variable: \n");
-    scanf("%c", &variable1);  /*CONVERTIR A MAYUSCULA LA LETRA INGRESADA*/
-    /*while (variable1 != 'V')
-    {
-        printf("La variable es incorrecta. Ingresela nuevamente\n");
-        scanf("%c", &variable1);
-    };*/
+    printf("\nHola! A continuacion te ayudaremos a generar una tabla de la verdad mediante una expresion booleana con una operacion \n");
 
-    printf("Ingrese la segunda variable: \n");
-    scanf("%c", &variable2);  /*CONVERTIR A MAYUSCULA LA LETRA INGRESADA*/
-    /*while (variable2 != 'V')
-    {
-        printf("La variable es incorrecta. Ingresela nuevamente\n");
-        scanf("%c", &variable2);
-    };*/
-    
-    printf("Seleccione una opción según la operacion deseada \n");
-    printf("1) Suma \n");
-    printf("2) \n");
-    printf("3) \n");
-    printf("4) \n");
-    printf("5) \n");
-    printf("6) \n");
-    
+    do
+    { //COMIENZO DEL CÓDIGO E INGRESO DE DATOS
+        printf("Ingrese la cantidad de variables para la expresion: "); //Cantidad de variables para el tamaño de la tabla
+        scanf("%d", &cantVariables);
 
-        scanf("%d", &option);
-        switch (option)
+        while (cantVariables != 2 && cantVariables != 3)
         {
-        case 1:
-            switch (variable1)  /*CHEQUEAR LA TABLA PARA VER SI ESTÁN BIEN LOS RESULTADOS*/
-            {
-            case 'V':
-                if (variable2 == 'V')
-                {
-                    resultado = "V";
-                }
-                    else if (variable2 = "F")
-                    {
-                        resultado = "F";
-                    }
-                break;
-            case 'F':
-                if (variable2 == 'F')
-                {
-                    resultado = "F";
-                }
-                else if (variable2 = "V")
-                {
-                    resultado = "V";
-                }
-                break;
-            }
-            break;
+            printf("No me encuentro programado para generar una tabla de esas dimensiones... Ingrese un valor de 2 o 3: ");
+            scanf("%d"), &cantVariables;
+        }
         
-        case 2:
-            break;
-            
-        case 3:
-            break;
+        cantRow = pow(2, cantVariables); //Calcula la cantidad de filas 2^n
+        cantColumn= cantVariables + 1; //Sumando 1 a la cantidad de columnas para crear la columna de resultado
+        char letrasVariables[cantVariables];
+        int tablaVerdad[cantRow][cantColumn]; 
 
-        case 4:
-            break;
-
-        case 5:
-            break;
-
-        case 6:
-            break;
-
-        default:
-            printf("La opción ingresada no existe \n");
-            printf("Ingrese una opción correcta \n");
-            break;
+        //INGRESO DE LAS LETRAS PARA LAS VARIABLES
+        printf("A continuacion ingrese una letra para representar las variables en la operacion, las mismas pueden ser cualquiera del abecedario\n");
+        for (int c = 0; c < cantColumn-1; c++) 
+        {
+            printf("Letra para la variable %d: ", c+1);
+            scanf("%s", &letrasVariables[c]);
+            letrasVariables[c] = toupper(letrasVariables[c]); //Pasa la letra a mayúsculas
+        }
+        
+        //CÓDIGO PARA SELECCIONAR LA OPERACIÓN A REALIZAR
+        printf("Ingresa la operacion a realizar (AND - OR): ");
+        scanf("%3s", operation); //%3s leer hasta 3 caracteres
+        //Convertir todos los caracteres ingresados a mayúscula
+        for (int i = 0; i < 3; i++) {
+            operation[i] = toupper(operation[i]);
+        }
+        while (strcmp(operation, "AND") != 0 && strcmp(operation, "OR") != 0) //Validación de la opción ingresada
+        {
+            printf("Lo siento, esa operacion no puedo realizarla. Ingrese nuevamente: "); 
+            scanf("%3s", operation); //%3s Permite leer hasta 3 caracteres
+            //Convierte todos los caracteres ingresados a mayúsculas
+            for (int i = 0; i < 3; i++) {
+                operation[i] = toupper(operation[i]);
+            }
         }
 
+        //CÓDOGO PARA CARGAR LOS VALORES DE LA TABLA
+        for (int f = 0; f < cantRow; f++)
+        {
+            for (int c = 0; c < cantColumn-1; c++) 
+            {
+                printf("Completar la tabla con 1 para verdadero, 0 para falso \n");
+                printf("Valor para la posicion en columna %d, la fila %d: ", c+1, f+1);
+                scanf("%d", &tablaVerdad[f][c]);
+                while (tablaVerdad[f][c] != 0 && tablaVerdad[f][c] != 1) //Valida el ingreso de los valores correctos
+                {
+                    printf("Los valores a ingresar deben ser 0 o 1, ingresa nuevamente: ");
+                    scanf("%d", &tablaVerdad[f][c]);
+                }
+            }
+        }
 
+        //CÓDIGO QUE REALIZA LA OPERACION
+        if (cantVariables == 2) //Cuando es una operación de 2 variables
+        {
+            for (int f = 0; f < cantRow; f++)
+            {
+                int resultado = tablaVerdad[f][0]; //Compara la 1ra posición y guarda el resultado
+
+                if (strcmp(operation, "AND") == 0)
+                {
+                    resultado = resultado && tablaVerdad[f][1]; //Compara la 2da posición con lo guardado en resultado
+                } else if (strcmp(operation, "OR") == 0)
+                {
+                    resultado = resultado || tablaVerdad[f][1];
+                } else{
+                    resultado = 5;
+                }
+                tablaVerdad[f][cantColumn-1] = resultado;
+            } 
+        } else if (cantVariables == 3) //Cuando es una operación de 3 variables
+        {
+            for (int f = 0; f < cantRow; f++)
+            {
+                int resultado = tablaVerdad[f][0];
+
+                if (strcmp(operation, "AND") == 0)
+                {
+                    resultado = resultado && tablaVerdad[f][1]; //Compara los primeros 2 valores
+                    resultado = resultado && tablaVerdad[f][2]; //Luego compara el resultado de los primeros 2 con el 3er valor
+                } else if (strcmp(operation, "OR") == 0)
+                {
+                    resultado = resultado || tablaVerdad[f][1];
+                    resultado = resultado || tablaVerdad[f][2];
+                } else{
+                    resultado = 5;
+                }
+                tablaVerdad[f][cantColumn-1] = resultado;
+            } 
+        } else{
+            printf("No deberia entrar aca\n");
+        }
+
+        //Si es OR le concatena un espacio al final para que cuando lo muestre quede con igual nro de caracteres que el AND y quede centrado
+        if (strcmp(operation, "OR") == 0)
+        {
+            strcat(operation, " ");
+        }
+        
+        //CÓDIGO PARA MOSTRAR LA TABLA COMPLETA
+        printf("\nTABLA DE LA VERDAD: \n");   
+        for (int c = 0; c < cantColumn-1; c++) { //Letra de cada variable
+            printf(" %c  | ", letrasVariables[c]);        
+        } 
+
+        printf("%s | \n", operation); //Operacion elegida
+
+        for (int f = 0; f < cantRow; f++)
+        {
+            printf("\n");
+            for (int c = 0; c < cantColumn; c++) //Valores de la tabla
+            {
+                printf(" %d  | ", tablaVerdad[f][c]);
+            }  
+        }  
+
+        //CÓDIGO DE CIERRE DEL PROGRAMA
+        printf("\n\nQueres ingresar otra operacion? (SI - NO): ");
+        scanf("%2s", continuo); //%3s Permite leer hasta 3 caracteres
+        //Convierte todos los caracteres a mayúsculas
+        for (int i = 0; i < 3; i++) {
+            continuo[i] = toupper(continuo[i]);
+        }
+    } while (strcmp(continuo, "SI") == 0); //Con la palabra SI pertime repetir el programa
+    
+    //MENSAJE DE DESPEDIDA
+    printf("\nGracias por utilizarme!\n"); 
+    printf("\nAdios!!\n");
+
+    system("pause"); //Para que no cierre la consola
     return 0;
 }
