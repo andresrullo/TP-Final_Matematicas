@@ -11,8 +11,12 @@ int main(){
     int cantRow = 0, cantColumn = 0;
     char operation[4];
     char continuo[3];
+    char name[100];
 
-    printf("\nHola! A continuacion te ayudaremos a generar una tabla de la verdad mediante una expresion booleana con una operacion \n");
+    printf("Por favor ingrese su nombre: ");
+    scanf("%99s", &name);
+
+    printf("\nHola %s! A continuacion te ayudaremos a generar una tabla de la verdad mediante una expresion booleana con una operacion \n", name);
 
     do
     { //COMIENZO DEL CÓDIGO E INGRESO DE DATOS
@@ -57,11 +61,11 @@ int main(){
         }
 
         //CÓDOGO PARA CARGAR LOS VALORES DE LA TABLA
+        printf("Completar la tabla con 1 para verdadero(V), 0 para falso(F) \n");
         for (int f = 0; f < cantRow; f++)
         {
             for (int c = 0; c < cantColumn-1; c++) 
             {
-                printf("Completar la tabla con 1 para verdadero, 0 para falso \n");
                 printf("Valor para la posicion en columna %d, la fila %d: ", c+1, f+1);
                 scanf("%d", &tablaVerdad[f][c]);
                 while (tablaVerdad[f][c] != 0 && tablaVerdad[f][c] != 1) //Valida el ingreso de los valores correctos
@@ -146,7 +150,7 @@ int main(){
     } while (strcmp(continuo, "SI") == 0); //Con la palabra SI pertime repetir el programa
     
     //MENSAJE DE DESPEDIDA
-    printf("\nGracias por utilizarme!\n"); 
+    printf("\nGracias por utilizarme, %s!\n", name); 
     printf("\nAdios!!\n");
 
     system("pause"); //Para que no cierre la consola
