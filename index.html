@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fecha Máxima</title>
+</head>
+<body>
+    <label for="fecha">Selecciona una fecha:</label>
+    <input type="date" id="fechaElegida" max="">
+    
+    <script>
+
+        const hoy = new Date();
+        const opciones = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const fechaFormateada = hoy.toLocaleDateString('sv-SE', opciones);
+        
+
+        document.getElementById('fechaElegida').max = fechaFormateada;
+    </script>
+</body>
+</html>
